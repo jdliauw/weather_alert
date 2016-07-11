@@ -1,13 +1,13 @@
-from __future__ import print_function
+import datetime
 import httplib2
+import oauth2client
 import os
 
+from __future__ import print_function
 from apiclient import discovery
-import oauth2client
 from oauth2client import client
 from oauth2client import tools
 
-import datetime
 
 try:
     import argparse
@@ -34,13 +34,11 @@ def get_credentials():
     credential_dir = os.path.join(home_dir, '.credentials')
     if not os.path.exists(credential_dir):
         os.makedirs(credential_dir)
-    credential_path = os.path.join(credential_dir,
-                                   'calendar-python-quickstart.json')
+    credential_path = os.path.join(credential_dir, 'calendar-python-quickstart.json')
 
     store = oauth2client.file.Storage(credential_path)
     credentials = store.get()
     if not credentials or credentials.invalid:
-        print ('yeah of course dude!')
         flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
         flow.user_agent = APPLICATION_NAME
         if flags:
@@ -51,17 +49,16 @@ def get_credentials():
     return credentials
 
 def main():
-    """Shows basic usage of the Google Calendar API.
-
+    """
     Creates a Google Calendar API service object and outputs a list of the next
     10 events on the user's calendar.
     """
+
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     service = discovery.build('calendar', 'v3', http=http)
 
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
     eventsResult = service.events().list(
         calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
         orderBy='startTime').execute()
@@ -72,6 +69,15 @@ def main():
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary'])
+
+
+
+
+# 12078353209
+
+
+
+
 
 
 if __name__ == '__main__':
