@@ -11,6 +11,8 @@ import httplib2
 import oauth2client
 import os
 import requests
+import schedule
+import time
 
 def get_gcal_credentials():
     home_dir = os.path.expanduser('~')
@@ -85,5 +87,14 @@ def main():
             print (text)
         	# client.messages.create(to = '12078389206', from_ = '12078353209', body = text)
 
+def execute():
+
+    schedule.every().minutes.do(main)
+    # schedule.every().day.at("23:58").do(main)
+    
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
 if __name__ == '__main__':
-    main()
+    execute()
