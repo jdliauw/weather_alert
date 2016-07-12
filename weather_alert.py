@@ -43,8 +43,9 @@ def get_gcal_events():
     http = cal_credentials.authorize(httplib2.Http())
     service = discovery.build('calendar', 'v3', http=http)
     day_start = datetime.datetime.utcnow().isoformat() + 'Z'
-    day_offset = timedelta(days=1)
+    day_offset = timedelta(hours=16, minutes=30)
     day_end = (datetime.datetime.now() + day_offset).isoformat() + 'Z'
+    # day_end = (datetime.datetime.utcnow() + day_offset).isoformat() + 'Z'
 
     eventsResult = service.events().list(
         calendarId='primary', timeMin=day_start, timeMax=day_end, singleEvents=True,
