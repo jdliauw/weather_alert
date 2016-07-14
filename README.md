@@ -1,3 +1,2 @@
 # weather_alert
-The purpose of this script is to use requests to securely log on to Google Calendar daily, and scrape the calendar for any outdoor events for the current/next day. If there are, scrape weather.com for the forecast/percentage and send an automated text message weather-alert the morning of.
-
+This script uses Google's Calendar API to scrape events for the day with an ending tag of '-o', signifying an outdoor event. For this hour, the precipitation percentage is scraped from AccuWeather and a text message is sent to the user using Twilio. Scheduling is done via the schedule module.

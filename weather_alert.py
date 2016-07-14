@@ -83,14 +83,13 @@ def main():
             
             text = 'You have \'' + event['summary'][:-3] + '\' scheduled at ' + \
                     time + ', and there is a ' + rain_percent + ' chance of rain.'
-                
-            print (text)
-        	# client.messages.create(to = '12078389206', from_ = '12078353209', body = text)
+            
+            client.messages.create(to = '12078389206', from_ = '12078353209', body = text)
 
 def execute():
 
     schedule.every().minutes.do(main)
-    # schedule.every().day.at("23:58").do(main)
+    schedule.every().day.at("21:31").do(main)
     
     while True:
         schedule.run_pending()
