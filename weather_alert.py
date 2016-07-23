@@ -60,7 +60,6 @@ def main():
     auth_token = '30c506a6affa75080179ae8227a77321'
     client = TwilioRestClient(account_sid, auth_token)
     events = get_gcal_events()
-    vcard = True
 
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
@@ -72,29 +71,28 @@ def main():
             hour = time[:2]
             url = 'http://www.accuweather.com/en/us/university-fl/32826/hourly-weather-forecast/2274320?hour=' + hour
 
-            if vcard:
-                url_request = requests.get(url)
-                html = url_request.text
-                soup = BeautifulSoup(html, 'html.parser')
-                rain_percent = (soup.find('div', {'class' : 'data-bar'}).span['style'][8:-2])
-                vcard = False
-
-            else:
-                rain_percent = (soup.find('div', {'class' : 'data-bar'}).span['style'][8:-2])
+            url_request = requests.get(url)
+            html = url_request.text
+            soup = BeautifulSoup(html, 'html.parser')
+            rain_percent = (soup.find('div', {'class' : 'data-bar'}).span['style'][8:-2])
+            rain_percent = (soup.find('div', {'class' : 'data-bar'}).span['style'][8:-2])
             
             text = 'You have \'' + event['summary'][:-3] + '\' scheduled at ' + \
                     time + ', and there is a ' + rain_percent + ' chance of rain.'
             
+            # print (text)
             client.messages.create(to = '12078389206', from_ = '12078353209', body = text)
 
-def execute():
+main()
 
-    schedule.every().minutes.do(main)
-    schedule.every().day.at("21:31").do(main)
+# def execute():
+
+#     schedule.every().minutes.do(main)
+#     # schedule.every().day.at("21:31").do(main)
     
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+#     while True:
+#         schedule.run_pending()
+#         time.sleep(1)
 
-if __name__ == '__main__':
-    execute()
+# if __name__ == '__main__':
+#     execute()
