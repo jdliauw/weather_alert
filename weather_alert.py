@@ -13,6 +13,7 @@ import os
 import requests
 import schedule
 import time
+import up
 
 def get_gcal_credentials():
     home_dir = os.path.expanduser('~')
@@ -43,7 +44,7 @@ def get_gcal_events():
     http = cal_credentials.authorize(httplib2.Http())
     service = discovery.build('calendar', 'v3', http=http)
     day_start = datetime.datetime.utcnow().isoformat() + 'Z'
-    day_offset = timedelta(hours=16, minutes=30)
+    day_offset = timedelta(hours=16, minutes=30) # run at 7:30 am
     day_end = (datetime.datetime.now() + day_offset).isoformat() + 'Z'
     # day_end = (datetime.datetime.utcnow() + day_offset).isoformat() + 'Z'
 
@@ -56,8 +57,10 @@ def get_gcal_events():
 
 def main():
 
-    account_sid = 'ACbf6ce5600928a164340f6f4b086e643d'
-    auth_token = '30c506a6affa75080179ae8227a77321'
+    account_sid = up.account_sid
+    auth_token = up.auth_token
+    phoneto = up.phoneto
+    phonefrom = up.phonefrom
     client = TwilioRestClient(account_sid, auth_token)
     events = get_gcal_events()
 
@@ -81,9 +84,7 @@ def main():
                     time + ', and there is a ' + rain_percent + ' chance of rain.'
             
             # print (text)
-            client.messages.create(to = '12078389206', from_ = '12078353209', body = text)
-
-main()
+            client.messages.create(to = phoneto, from_ = phonefrom, body = text)
 
 # def execute():
 
@@ -94,5 +95,5 @@ main()
 #         schedule.run_pending()
 #         time.sleep(1)
 
-# if __name__ == '__main__':
-#     execute()
+if __name__ == '__main__':
+    main()
